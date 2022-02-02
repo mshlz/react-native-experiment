@@ -1,42 +1,62 @@
 import { StatusBar } from 'expo-status-bar';
 import { useState } from 'react';
-import { StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Button, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { Input } from './Input';
 
 export default function App() {
   const [valueA, setValueA] = useState(0);
   const [valueB, setValueB] = useState(0);
 
   const sumValues = () => {
-    const sum = valueA + valueB
-    alert("Sum: " + sum)
+    const result = valueA + valueB
+    alert(`${valueA} + ${valueB} = ${result}`)
+  }  
+  const subtractValues = () => {
+    const result = valueA - valueB
+    alert(`${valueA} - ${valueB} = ${result}`)
+  }  
+  const multiplyValues = () => {
+    const result = valueA * valueB
+    alert(`${valueA} * ${valueB} = ${result}`)
+  }  
+  const divideValues = () => {
+    const result = valueA / valueB
+    alert(`${valueA} / ${valueB} = ${result}`)
   }
+  
 
   return (
     <View style={styles.container}>
       <StatusBar backgroundColor='black' />
 
-      <TextInput
-        underlineColorAndroid="transparent"
+      <Input
+        label="Value A"
         placeholder="Enter the first value"
-        placeholderTextColor="black"
-        autoCapitalize="none"
-        keyboardType="numeric"
-        onChangeText={value => setValueA(+value)}
+        onChange={value => setValueA(+value)}
       />
-      <TextInput
-        underlineColorAndroid="transparent"
+      <Input
+        label="Value B"
         placeholder="Enter the second value"
-        placeholderTextColor="black"
-        autoCapitalize="none"
-        keyboardType="numeric"
-        onChangeText={value => setValueB(+value)}
+        onChange={value => setValueB(+value)}
       />
 
-      <TouchableOpacity
+
+      <Button
+        title="Sum"
         onPress={() => sumValues()}
-      >
-        <Text>Sum</Text>
-      </TouchableOpacity>
+      />
+      <Button
+        title="Subtract"
+        onPress={() => subtractValues()}
+      />
+      <Button
+        title="Multiply"
+        onPress={() => multiplyValues()}
+      />
+      <Button
+        title="Divide"
+        onPress={() => divideValues()}
+      />
     </View>
   );
 }
