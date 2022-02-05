@@ -1,29 +1,57 @@
+import * as Speech from 'expo-speech';
 import { StatusBar } from 'expo-status-bar';
-import { useState } from 'react';
-import { Button, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native';
+import { useEffect, useState } from 'react';
+import { Button, StyleSheet, View } from 'react-native';
 import { Input } from './Input';
+import translation from './translations/translation.json';
+
+type LangType = 'pt-BR' | 'en-US'
+type Operation = '+' | '-' | '*' | '/'
 
 export default function App() {
-  const [valueA, setValueA] = useState(0);
-  const [valueB, setValueB] = useState(0);
+  const [lang, setLang] = useState<LangType>('pt-BR') // TODO add way to change
+  const [isSpeeching, setIsSpeeching] = useState(false)
 
-  const sumValues = () => {
-    const result = valueA + valueB
-    alert(`${valueA} + ${valueB} = ${result}`)
-  }  
-  const subtractValues = () => {
-    const result = valueA - valueB
-    alert(`${valueA} - ${valueB} = ${result}`)
-  }  
-  const multiplyValues = () => {
-    const result = valueA * valueB
-    alert(`${valueA} * ${valueB} = ${result}`)
-  }  
-  const divideValues = () => {
-    const result = valueA / valueB
-    alert(`${valueA} / ${valueB} = ${result}`)
+  const [valueA, setValueA] = useState(0)
+  const [valueB, setValueB] = useState(0)
+
+  const speechOperation = (op: Operation, a: number, b: number, result: number) => {
+    if (isSpeeching) {
+      Speech.stop()
+      setIsSpeeching(false)
+    } else {
+      setIsSpeeching(true)
+    }
+
+    const opName = translation[lang][op]
+    const equalName = translation[lang]['=']
+
+    const speechText = `${a} ${opName} ${b} ${equalName} ${result}`
+    Speech.speak(speechText, { language: lang })
   }
-  
+
+  const executeOperation = (operation: Operation) => {
+    let result: number
+
+    switch (operation) {
+      case '+':
+        result = valueA + valueB
+        break
+      case '-':
+        result = valueA - valueB
+        break
+      case '*':
+        result = valueA * valueB
+        break
+      case '/':
+        result = valueA / valueB
+        break
+      default:
+        return
+    }
+
+    speechOperation(operation, valueA, valueB, result)
+  }
 
   return (
     <View style={styles.container}>
@@ -43,19 +71,19 @@ export default function App() {
 
       <Button
         title="Sum"
-        onPress={() => sumValues()}
+        onPress={() => executeOperation('+')}
       />
       <Button
         title="Subtract"
-        onPress={() => subtractValues()}
+        onPress={() => executeOperation('-')}
       />
       <Button
         title="Multiply"
-        onPress={() => multiplyValues()}
+        onPress={() => executeOperation('*')}
       />
       <Button
         title="Divide"
-        onPress={() => divideValues()}
+        onPress={() => executeOperation('/')}
       />
     </View>
   );
