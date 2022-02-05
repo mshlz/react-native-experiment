@@ -4,13 +4,13 @@
         "+": "mais",
         "-": "menos",
         "*": "vezes",
-        "/": "dividido"
+        "/": "dividido por"
     },
     "en-US": {
         "=": "equals to",
         "+": "plus",
         "-": "minus",
         "*": "times",
-        "/": "divide"
+        "/": "divided by"
     }
 }
